@@ -13,6 +13,7 @@ const bootstrap = async (app, express) => {
     app.use(morgan("dev"));
     app.use(express.json());
     app.use("/uploads", express.static("uploads"));
+    app.get("/", (req, res) => res.send("Hello World!"));
     await DB();
     app.use('/auth', authConroller);
     app.use('/user', userConroller);
