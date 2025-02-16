@@ -5,7 +5,7 @@ import isAuthorized from "../../middlewares/authorization.js";
 import { roles } from "../../DB/models/user.model.js";
 import * as userValidation from './user.validation.js';
 import { validation } from "../../middlewares/validation.middleware.js";
-import { fileValidation, upload } from "../../utils/file uploading/multerUpload.js";
+// import { fileValidation, upload } from "../../utils/file uploading/multerUpload.js";
 import { uploadCloud } from "../../utils/file uploading/multerCloud.js";
 const router = Router();
 
@@ -21,9 +21,9 @@ router.patch('/updateEmail', isAuthenticated, isAuthorized(roles.user), validati
 
 router.get('/verifySecondEmail/:token', userService.verifySecondEmail)
 
-router.post('/profilePicture', isAuthenticated, upload(fileValidation.images, "uploads/users").single('image'), userService.profilePicture)
+// router.post('/profilePicture', isAuthenticated, upload(fileValidation.images, "uploads/users").single('image'), userService.profilePicture)
 
-router.post('/coverPictures', isAuthenticated, upload(fileValidation.images, "uploads/users").array('images'), userService.coverPictures)
+// router.post('/coverPictures', isAuthenticated, upload(fileValidation.images, "uploads/users").array('images'), userService.coverPictures)
 
 router.delete('/deleteProfilePicture', isAuthenticated, userService.deleteProfilePicture)
 
