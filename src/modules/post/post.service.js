@@ -102,19 +102,15 @@ export const getSinglePost = asyncHandler(async (req, res, next) => {
 
 export const allActivePosts = asyncHandler(async (req, res, next) => {
     let posts;
-    if (req.user.role == roles.admin) {
-        posts = await Post.find({ isDeleted: false }).populate({
-            path: 'user',
-            select: "userName profilePictureCloud.secure_url"
-        })
-    }
-    else if (req.user.role == roles.user) {
-        posts = await Post.find({ isDeleted: false, user: req.user._id }).populate({
-            path: 'user',
-            select: "userName profilePictureCloud.secure_url"
-        })
-    }
-    res.status(200).json({ success: true, posts })
+    const { page } = req.query
+
+    posts = await Post.find({ isDeleted: false, user: req.user._id }).populate({
+        path: 'user',
+        select: "userName profilePictureCloud.secure_url"
+    }).paginate(page)
+
+
+    return res.status(200).json({ success: true, post: posts })
 })
 
 

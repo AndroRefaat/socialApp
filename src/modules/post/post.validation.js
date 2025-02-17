@@ -37,3 +37,8 @@ export const getSinglePost = joi.object({
 export const like_unlike = joi.object({
     id: joi.custom(isValidObjectId).required(),
 }).required();
+
+
+export const allActivePosts = joi.object({
+    page: joi.number().min(1)
+}).required();

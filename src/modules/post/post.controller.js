@@ -20,7 +20,7 @@ router.patch('/:id/unfreeze', isAuthenticated, isAuthorized(roles.user, roles.ad
 
 router.get('/:id', isAuthenticated, isAuthorized(roles.user, roles.admin), validation(postValidation.getSinglePost), postService.getSinglePost)
 
-router.get('/active/allPosts', isAuthenticated, isAuthorized(roles.user, roles.admin), postService.allActivePosts)
+router.get('/active/allPosts', isAuthenticated, isAuthorized(roles.user, roles.admin, roles.superadmin), validation(postValidation.allActivePosts), postService.allActivePosts)
 
 router.get('/freezed/allPosts', isAuthenticated, isAuthorized(roles.user, roles.admin), postService.allFreezedPosts)
 

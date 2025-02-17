@@ -36,5 +36,25 @@ postSchema.virtual("comments", {
     localField: "_id"
 })
 
+postSchema.query.paginate = async function (page) {
+    page = page ? page : 1
+    const limit = 4;
+    const skip = limit * (page - 1);
+
+    const data = await this.skip(skip).limit(limit)
+    const items = await this.model.countDocuments()
+
+    return {
+        data,
+        currentPage: Number(page),
+        totalItems: items,
+        totalPages: Math.ceil(items / limit),
+        itemsPerPage: data.length
+    }
+
+
+}
+
+
 const Post = model("Post", postSchema);
 export default Post;
