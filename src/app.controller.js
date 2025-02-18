@@ -8,9 +8,20 @@ import notFoundHandler from './utils/errorHandeling/notFoundHandler.js';
 import adminController from './modules/admin/admin.controller.js';
 import cors from 'cors';
 import morgan from 'morgan';
+import { rateLimit } from 'express-rate-limit'
+import helmet from "helmet";
 const bootstrap = async (app, express) => {
+    const limiter = rateLimit({
+        windowMs: 15 * 60 * 1000, // 15 minutes
+        limit: 5,
+        message: "Too many requests from this IP, please try again later.",
+        legacyHeaders: false,
+        standardHeaders: true,
+    })
+    app.use(helmet());
     app.use(cors());
     app.use(morgan("dev"));
+    app.use(limiter);
     app.use(express.json());
     app.use("/uploads", express.static("uploads"));
     app.get("/", (req, res) => res.send("Hello World!"));
