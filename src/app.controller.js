@@ -10,6 +10,8 @@ import cors from 'cors';
 import morgan from 'morgan';
 import { rateLimit } from 'express-rate-limit'
 import helmet from "helmet";
+import { createHandler } from 'graphql-http/lib/use/express';
+import { schema } from './app.schema.js';
 const bootstrap = async (app, express) => {
     const limiter = rateLimit({
         windowMs: 15 * 60 * 1000, // 15 minutes
@@ -18,6 +20,20 @@ const bootstrap = async (app, express) => {
         legacyHeaders: false,
         standardHeaders: true,
     })
+    app.use('/graphql', createHandler({
+        schema,
+        context: (req) => {
+            const { authorization } = req.headers;
+            return { authorization }
+        },
+        formatError: (err) => {
+            return {
+                success: false,
+                message: err.originalError.message,
+                statusCode: err.originalError?.cause || 500
+            }
+        }
+    }))
     app.use(helmet());
     app.use(cors());
     app.use(morgan("dev"));
